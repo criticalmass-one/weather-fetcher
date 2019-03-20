@@ -3,7 +3,8 @@
     "description": "Handle weather data",
     "type": "library",
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "cmfcmf/openweathermap-php-api": "^2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
@@ -18,11 +19,6 @@
     "autoload": {
         "psr-4": {
             "Caldera\\WeatherBundle\\": ""
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Caldera\\WeatherBundle\\Tests\\": "Tests/"
         }
     },
     "scripts": {
