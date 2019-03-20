@@ -3,6 +3,7 @@
 namespace Caldera\WeatherBundle\Command;
 
 use App\Entity\Weather;
+use Caldera\WeatherBundle\ForecastRetriever\WeatherForecastRetrieverInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace App\WeatherBundle\WeatherFactory;
+namespace Caldera\WeatherBundle\WeatherFactory;
 
-use App\Criticalmass\Weather\EntityInterface\WeatherInterface;
+use Caldera\WeatherBundle\EntityInterface\WeatherInterface;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
 interface WeatherFactoryInterface

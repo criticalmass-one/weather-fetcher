@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\Tests\Weather;
+namespace Caldera\WeatherBundle\Tests;
 
 use App\Criticalmass\Weather\WeatherFactory\WeatherFactory;
 use App\Entity\Ride;
