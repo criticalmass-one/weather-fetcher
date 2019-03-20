@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Criticalmass\Weather\WeatherFactory;
+namespace App\WeatherBundle\WeatherFactory;
 
 use App\Criticalmass\Weather\EntityInterface\WeatherInterface;
 use Cmfcmf\OpenWeatherMap\Forecast;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Criticalmass\Weather\ForecastRetriever;
+namespace Caldera\WeatherBundle\ForecastRetriever;
 
 use App\Criticalmass\Weather\WeatherFactory\WeatherFactoryInterface;
 use App\Entity\Ride;
