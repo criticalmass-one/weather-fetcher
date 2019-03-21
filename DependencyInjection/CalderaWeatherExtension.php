@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class WeatherExtension extends Extension
+class CalderaWeatherExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -21,6 +21,9 @@ class WeatherExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('calderaWeatherWeatherFqcn', $config['weather_class']);
+        $container->setParameter('calderaWeatherOwmAppId', $config['owm_app_id']);
 
         $xmlLoader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $xmlLoader->load('services.xml');

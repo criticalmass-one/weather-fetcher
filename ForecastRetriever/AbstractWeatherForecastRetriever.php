@@ -2,9 +2,9 @@
 
 namespace Caldera\WeatherBundle\ForecastRetriever;
 
-use App\Criticalmass\Weather\WeatherFactory\WeatherFactoryInterface;
 use App\Entity\Ride;
 use App\Entity\Weather;
+use Caldera\WeatherBundle\WeatherFactory\WeatherFactoryInterface;
 use Cmfcmf\OpenWeatherMap;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -26,14 +26,14 @@ abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrie
     /** @var WeatherFactoryInterface $weatherFactory */
     protected $weatherFactory;
 
-    public function __construct(RegistryInterface $doctrine, OpenWeatherMap $openWeatherMap, WeatherFactoryInterface $weatherFactory, LoggerInterface $logger, string $openWeatherMapApiKey)
+    public function __construct(RegistryInterface $doctrine, OpenWeatherMap $openWeatherMap, WeatherFactoryInterface $weatherFactory, LoggerInterface $logger, string $owmAppId)
     {
         $this->doctrine = $doctrine;
         $this->logger = $logger;
         $this->weatherFactory = $weatherFactory;
 
         $this->openWeatherMap = $openWeatherMap;
-        $this->openWeatherMap->setApiKey($openWeatherMapApiKey);
+        $this->openWeatherMap->setApiKey($owmAppId);
     }
 
     protected function getLatLng(Ride $ride): array

@@ -2,20 +2,28 @@
 
 namespace Caldera\WeatherBundle\WeatherFactory;
 
-use App\Entity\Weather;
 use Caldera\WeatherBundle\EntityInterface\WeatherInterface;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
 class WeatherFactory implements WeatherFactoryInterface
 {
+    /** @var array $mapping */
     protected $mapping = [
         'setWeatherDateTime' => ['time', 'from'],
         'setWeatherCode' => ['weather', 'id'],
     ];
 
+    /** @var string $weatherClass */
+    protected $weatherClass;
+
+    public function __construct(string $weatherClass)
+    {
+        $this->weatherClass = $weatherClass;
+    }
+
     protected function createEntity(): WeatherInterface
     {
-        return new Weather();
+        return new $this->weatherClass();
     }
 
     protected function getMapping(WeatherInterface $weather): array

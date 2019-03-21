@@ -5,6 +5,6 @@ namespace Caldera\WeatherBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class WeatherBundle extends Bundle
+class CalderaWeatherBundle extends Bundle
 {
 }

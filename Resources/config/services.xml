@@ -5,8 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults autowire="true" autoconfigure="true" public="true"/>
+        <defaults autowire="true" autoconfigure="true" public="true">
+            <bind key="$weatherClass">calderaWeatherWeatherFqcn</bind>
+            <bind key="$owmAppId">calderaWeatherOwmAppId</bind>
+        </defaults>
 
         <prototype namespace="Caldera\WeatherBundle\" resource="../../*" exclude="../../{DependencyInjection,tests}"/>
+
+        <service id="Cmfcmf\OpenWeatherMap" />
     </services>
 </container>
