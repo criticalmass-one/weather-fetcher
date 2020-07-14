@@ -4,8 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "435c103eb700c3b5f1722b38bd87a03c",
+    "content-hash": "937988f19ca1f04e5c074125f69da847",
     "packages": [
+        {
+            "name": "calderacc/geobasic",
+            "version": "0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/calderacc/geobasic.git",
+                "reference": "d1c60fe735b7147dcb55cd466d53e420d5c0fe6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/calderacc/geobasic/zipball/d1c60fe735b7147dcb55cd466d53e420d5c0fe6b",
+                "reference": "d1c60fe735b7147dcb55cd466d53e420d5c0fe6b",
+                "shasum": ""
+            },
+            "require": {
+                "emcconville/google-map-polyline-encoding-tool": "^1.3",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Caldera\\GeoBasic\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Malte Huebner",
+                    "email": "malte@caldera.cc"
+                }
+            ],
+            "time": "2017-05-05T10:40:27+00:00"
+        },
         {
             "name": "cmfcmf/openweathermap-php-api",
             "version": "v2.4.0",
@@ -55,6 +94,51 @@
                 "weather"
             ],
             "time": "2018-08-30T07:35:48+00:00"
+        },
+        {
+            "name": "emcconville/google-map-polyline-encoding-tool",
+            "version": "v1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/emcconville/google-map-polyline-encoding-tool.git",
+                "reference": "dbf3816936620b88f0fc4000fddd94b5ce13eadb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/emcconville/google-map-polyline-encoding-tool/zipball/dbf3816936620b88f0fc4000fddd94b5ce13eadb",
+                "reference": "dbf3816936620b88f0fc4000fddd94b5ce13eadb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.*",
+                "satooshi/php-coveralls": "dev-master",
+                "squizlabs/php_codesniffer": "2.0.0a2"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Polyline.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "authors": [
+                {
+                    "name": "Eric McConville",
+                    "email": "emcconville@emcconville.com"
+                }
+            ],
+            "description": "A simple class to handle polyline-encoding for Google Maps",
+            "keywords": [
+                "google",
+                "maps"
+            ],
+            "time": "2016-04-05T01:18:39+00:00"
         }
     ],
     "packages-dev": [
