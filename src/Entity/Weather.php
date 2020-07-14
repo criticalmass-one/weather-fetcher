@@ -4,7 +4,7 @@ namespace App\Entity;
 
 class Weather
 {
-    protected int $rideId = null;
+    protected int $rideId;
 
     protected ?string $json = null;
 
