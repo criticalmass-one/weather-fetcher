@@ -10,55 +10,7 @@ use Cmfcmf\OpenWeatherMap\Exception as OWMException;
 
 class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 {
-    public function retrieve(\DateTime $startDateTime = null, \DateTime $endDateTime = null): array
-    {
-        if (!$startDateTime) {
-            $startDateTime = new \DateTime();
-        }
-
-        if (!$endDateTime) {
-            $endDateInterval = new \DateInterval('P1W');
-            $endDateTime = new \DateTime();
-            $endDateTime->add($endDateInterval);
-        }
-
-        $halfDayInterval = new \DateInterval('PT12H');
-        $halfDateTime = new \DateTime();
-        $halfDateTime->sub($halfDayInterval);
-
-        $rideList = $this->findRides($startDateTime, $endDateTime);
-
-        /** @var Ride $ride */
-        foreach ($rideList as $ride) {
-            if (!$ride->getLatitude() || !$ride->getLongitude()) {
-                continue;
-            }
-            
-            $currentWeather = $this->findCurrentWeatherForRide($ride);
-
-            if (!$currentWeather || $currentWeather->getCreationDateTime() < $halfDateTime) {
-                $weather = $this->retrieveWeather($ride);
-
-                if ($weather) {
-                    $this->newWeatherList[] = $weather;
-
-                    $this->logger->info(
-                        sprintf(
-                            'Loaded weather data for city %s and ride %s',
-                            $ride->getCity()->getCity(),
-                            $ride->getDateTime()->format('Y-m-d')
-                        )
-                    );
-                }
-            }
-        }
-
-        $this->doctrine->getManager()->flush();
-
-        return $this->newWeatherList;
-    }
-
-    protected function retrieveWeather(Ride $ride): ?Weather
+    protected function retrieveWeather(CoordInterface $coord): ?Weather
     {
         try {
             /** @var WeatherForecast $owmWeatherForecast */
