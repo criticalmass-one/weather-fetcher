@@ -53,7 +53,7 @@
         ]
     },
     "php": {
-        "version": "7.3"
+        "version": "7.4"
     },
     "php-http/guzzle6-adapter": {
         "version": "v2.0.1"
