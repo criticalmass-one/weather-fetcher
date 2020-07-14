@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\Command;
+namespace App\Command;
 
 use App\Entity\Weather;
-use Caldera\WeatherBundle\ForecastRetriever\WeatherForecastRetrieverInterface;
+use App\ForecastRetriever\WeatherForecastRetrieverInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;

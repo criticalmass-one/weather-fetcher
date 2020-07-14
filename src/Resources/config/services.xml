@@ -10,7 +10,7 @@
             <bind key="$owmAppId">calderaWeatherOwmAppId</bind>
         </defaults>
 
-        <prototype namespace="Caldera\WeatherBundle\" resource="../../*" exclude="../../{DependencyInjection,tests}"/>
+        <prototype namespace="App\" resource="../../*" exclude="../../{DependencyInjection,tests}"/>
 
         <service id="Cmfcmf\OpenWeatherMap" />
     </services>

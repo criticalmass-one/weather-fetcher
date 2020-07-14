@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\ForecastRetriever;
+namespace App\ForecastRetriever;
 
 use App\Entity\Ride;
 use App\Entity\Weather;
-use Caldera\WeatherBundle\WeatherFactory\WeatherFactoryInterface;
+use App\WeatherFactory\WeatherFactoryInterface;
 use Cmfcmf\OpenWeatherMap;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;

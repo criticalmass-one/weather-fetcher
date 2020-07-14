@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\ForecastRetriever;
+namespace App\ForecastRetriever;
 
 use App\Entity\Ride;
 use App\Entity\Weather;
