@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Weather;
 use App\ForecastRetriever\WeatherForecastRetrieverInterface;
+use App\RideRetriever\RideRetrieverInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,51 +13,52 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateWeatherCommand extends Command
 {
-    /** @var WeatherForecastRetrieverInterface $weatherForecastRetriever */
-    protected $weatherForecastRetriever;
+    protected WeatherForecastRetrieverInterface $weatherForecastRetriever;
+    protected RideRetrieverInterface $rideRetriever;
 
-    /** @var OutputInterface $output */
-    protected $output;
-
-    /** @var InputInterface $input */
-    protected $input;
-
-    public function __construct(WeatherForecastRetrieverInterface $weatherForecastRetriever)
+    public function __construct(RideRetrieverInterface $rideRetriever, WeatherForecastRetrieverInterface $weatherForecastRetriever)
     {
         $this->weatherForecastRetriever = $weatherForecastRetriever;
+        $this->rideRetriever = $rideRetriever;
 
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('criticalmass:weather:update')
             ->setDescription('Retrieve weather forecasts for parameterized range')
             ->addArgument(
-                'startDateTime',
+                'from',
                 InputArgument::OPTIONAL,
                 'Range start date time'
             )
             ->addArgument(
-                'endDateTime',
+                'until',
                 InputArgument::OPTIONAL,
                 'Range end date time'
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $startDateTime = null;
-        $endDateTime = null;
-
-        if ($input->getArgument('startDateTime')) {
-            $startDateTime = new \DateTime($input->getArgument('startDateTime'));
+        if ($input->getArgument('from')) {
+            $startDateTime = new \DateTimeImmutable($input->getArgument('from'));
+        } else {
+            $startDateTime = new \DateTimeImmutable();
         }
 
-        if ($input->getArgument('endDateTime')) {
-            $endDateTime = new \DateTime($input->getArgument('endDateTime'));
+        if ($input->getArgument('until')) {
+            $endDateTime = new \DateTimeImmutable($input->getArgument('until'));
+        } else {
+            $period = new \DateInterval('P1W');
+            $endDateTime = $startDateTime->add($period);
         }
+
+        $rideList = $this->rideRetriever->retrieveRides($startDateTime, $endDateTime);
+
+        dd($rideList);
 
         $this->weatherForecastRetriever->retrieve($startDateTime, $endDateTime);
 
