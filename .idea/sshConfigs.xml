@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SshConfigs">
-    <configs>
-      <sshConfig authType="PASSWORD" host="criticalmass.cm" id="d40a72c0-8a7b-464f-b6fa-f3458198cdec" port="22" customName="vagrant" nameFormat="CUSTOM" username="vagrant" />
-    </configs>
-  </component>
-</project>
