@@ -13,19 +13,6 @@ class WeatherFactory implements WeatherFactoryInterface
         'setWeatherCode' => ['weather', 'id'],
     ];
 
-    /** @var string $weatherClass */
-    protected $weatherClass;
-
-    public function __construct(string $weatherClass)
-    {
-        $this->weatherClass = $weatherClass;
-    }
-
-    protected function createEntity(): Weather
-    {
-        return new $this->weatherClass();
-    }
-
     protected function getMapping(Weather $weather): array
     {
         $reflection = new \ReflectionClass($weather);

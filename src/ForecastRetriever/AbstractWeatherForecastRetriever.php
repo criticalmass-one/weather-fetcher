@@ -2,18 +2,14 @@
 
 namespace App\ForecastRetriever;
 
-use App\Entity\Ride;
-use App\Entity\Weather;
 use App\WeatherFactory\WeatherFactoryInterface;
 use Cmfcmf\OpenWeatherMap;
+use Http\Adapter\Guzzle6\Client;
+use Http\Factory\Guzzle\RequestFactory;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrieverInterface
 {
-    /** @var RegistryInterface $doctrine */
-    protected $doctrine;
-
     /** @var OpenWeatherMap openWeatherMap */
     protected $openWeatherMap;
 
@@ -26,14 +22,15 @@ abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrie
     /** @var WeatherFactoryInterface $weatherFactory */
     protected $weatherFactory;
 
-    public function __construct(RegistryInterface $doctrine, OpenWeatherMap $openWeatherMap, WeatherFactoryInterface $weatherFactory, LoggerInterface $logger, string $owmAppId)
+    public function __construct(WeatherFactoryInterface $weatherFactory, LoggerInterface $logger, string $owmApiKey)
     {
-        $this->doctrine = $doctrine;
         $this->logger = $logger;
         $this->weatherFactory = $weatherFactory;
 
-        $this->openWeatherMap = $openWeatherMap;
-        $this->openWeatherMap->setApiKey($owmAppId);
+        $httpRequestFactory = new RequestFactory();
+        $httpClient = Client::createWithConfig([]);
+
+        $this->openWeatherMap = new OpenWeatherMap($owmApiKey, $httpClient, $httpRequestFactory);
     }
 
     protected function getLatLng(Ride $ride): array
@@ -43,16 +40,6 @@ abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrie
         }
 
         return $ride->getCity()->getCoord()->toLatLonArray();
-    }
-
-    protected function findRides(\DateTime $startDateTime, \DateTime $endDateTime): array
-    {
-        return $this->doctrine->getRepository(Ride::class)->findRidesInInterval($startDateTime, $endDateTime);
-    }
-
-    protected function findCurrentWeatherForRide(Ride $ride): ?Weather
-    {
-        return $this->doctrine->getRepository(Weather::class)->findCurrentWeatherForRide($ride);
     }
 
     public function getNewWeatherForecasts(): array

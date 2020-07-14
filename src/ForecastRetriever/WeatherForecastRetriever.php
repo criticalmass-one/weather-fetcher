@@ -44,4 +44,9 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 
         return null;
     }
+
+    public function retrieve(\DateTime $startDateTime = null, \DateTime $endDateTime = null): array
+    {
+        // TODO: Implement retrieve() method.
+    }
 }
