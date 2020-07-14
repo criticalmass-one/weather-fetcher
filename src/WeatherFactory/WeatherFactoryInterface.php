@@ -2,10 +2,10 @@
 
 namespace App\WeatherFactory;
 
-use App\EntityInterface\WeatherInterface;
+use App\Entity\Weather;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
 interface WeatherFactoryInterface
 {
-    public function createWeather(Forecast $owmWeather): WeatherInterface;
+    public function createWeather(Forecast $owmWeather): Weather;
 }

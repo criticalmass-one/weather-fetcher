@@ -2,7 +2,7 @@
 
 namespace App\WeatherFactory;
 
-use App\EntityInterface\WeatherInterface;
+use App\Entity\Weather;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
 class WeatherFactory implements WeatherFactoryInterface
@@ -21,12 +21,12 @@ class WeatherFactory implements WeatherFactoryInterface
         $this->weatherClass = $weatherClass;
     }
 
-    protected function createEntity(): WeatherInterface
+    protected function createEntity(): Weather
     {
         return new $this->weatherClass();
     }
 
-    protected function getMapping(WeatherInterface $weather): array
+    protected function getMapping(Weather $weather): array
     {
         $reflection = new \ReflectionClass($weather);
 
@@ -51,7 +51,7 @@ class WeatherFactory implements WeatherFactoryInterface
         return $this->mapping;
     }
 
-    protected function assignProperties(WeatherInterface $weather, Forecast $owmWeather): WeatherInterface
+    protected function assignProperties(Weather $weather, Forecast $owmWeather): Weather
     {
         foreach ($this->getMapping($weather) as $methodName => $path) {
             $weather = $this->assignProperty($weather, $owmWeather, $methodName, $path);
@@ -60,7 +60,7 @@ class WeatherFactory implements WeatherFactoryInterface
         return $weather;
     }
 
-    protected function assignProperty(WeatherInterface $weather, Forecast $owmWeather, string $methodName, array $path): WeatherInterface
+    protected function assignProperty(Weather $weather, Forecast $owmWeather, string $methodName, array $path): Weather
     {
         if (2 === count($path)) {
             list($prop1, $prop2) = $path;
@@ -93,7 +93,7 @@ class WeatherFactory implements WeatherFactoryInterface
         return $weather;
     }
 
-    public function createWeather(Forecast $owmWeather): WeatherInterface
+    public function createWeather(Forecast $owmWeather): Weather
     {
         $weather = $this->createEntity();
 
