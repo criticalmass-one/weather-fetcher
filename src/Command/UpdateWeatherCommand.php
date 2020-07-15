@@ -64,7 +64,8 @@ class UpdateWeatherCommand extends Command
         $io->success(sprintf('Retrieved %d rides from %s until %s', count($rideList), $startDateTime->format('Y-m-d'), $endDateTime->format('Y-m-d')));
 
         $weatherList = $this->weatherForecastRetriever->retrieveWeatherForecastsForRideList($rideList);
-
+die;
+        dd($weatherList);
         $table = new Table($output);
         $table->setHeaders(['City', 'DateTime']);
 

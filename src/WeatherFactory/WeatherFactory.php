@@ -70,7 +70,7 @@ class WeatherFactory implements WeatherFactoryInterface
         foreach ($mapping as $methodName => $path) {
             $weather = static::assignProperty($weather, $owmWeather, $methodName, $path);
         }
-die;
+
         return $weather;
     }
 
@@ -82,7 +82,9 @@ die;
             if (property_exists($owmWeather, $prop1) && property_exists($owmWeather->{$prop1}, $prop2)) {
                 if (is_object($owmWeather->{$prop1}->{$prop2}) && method_exists($owmWeather->{$prop1}->{$prop2}, 'getValue')) {
                     $weather->$methodName($owmWeather->{$prop1}->{$prop2}->getValue());
-                } if (is_string($owmWeather->{$prop1}->{$prop2}) || is_int($owmWeather->{$prop1}->{$prop2})) {
+                } elseif (is_string($owmWeather->{$prop1}->{$prop2}) || is_int($owmWeather->{$prop1}->{$prop2}) || is_float($owmWeather->{$prop1}->{$prop2})) {
+                    $weather->$methodName($owmWeather->{$prop1}->{$prop2});
+                } elseif ($owmWeather->{$prop1}->{$prop2} instanceof \DateTimeInterface) {
                     $weather->$methodName($owmWeather->{$prop1}->{$prop2});
                 }
             }
@@ -94,10 +96,13 @@ die;
             if (property_exists($owmWeather, $prop1)) {
                 if (is_object($owmWeather->{$prop1}) && method_exists($owmWeather->{$prop1}, 'getValue')) {
                     $weather->$methodName($owmWeather->{$prop1}->getValue());
-                }
-
-                if (is_string($owmWeather->{$prop1}) || is_int($owmWeather->{$prop1})) {
+                } elseif (is_string($owmWeather->{$prop1}) || is_int($owmWeather->{$prop1})) {
                     $weather->$methodName($owmWeather->{$prop1});
+                } elseif ($owmWeather->{$prop1} instanceof \Cmfcmf\OpenWeatherMap\Util\Weather) {
+                    $weather
+                        ->setWeatherCode($owmWeather->{$prop1}->id)
+                        ->setWeather($owmWeather->{$prop1}->description)
+                        ->setWeatherIcon($owmWeather->{$prop1}->icon);
                 }
             }
         }
