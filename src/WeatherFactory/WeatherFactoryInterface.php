@@ -7,5 +7,5 @@ use Cmfcmf\OpenWeatherMap\Forecast;
 
 interface WeatherFactoryInterface
 {
-    public function createWeather(Forecast $owmWeather): Weather;
+    public static function createWeather(Forecast $owmWeather): Weather;
 }

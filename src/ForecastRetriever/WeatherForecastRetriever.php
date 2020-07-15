@@ -4,22 +4,30 @@ namespace App\ForecastRetriever;
 
 use App\Entity\Ride;
 use App\Entity\Weather;
+use App\WeatherFactory\WeatherFactory;
 use Cmfcmf\OpenWeatherMap\Forecast;
 use Cmfcmf\OpenWeatherMap\WeatherForecast;
 use Cmfcmf\OpenWeatherMap\Exception as OWMException;
 
 class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 {
-    protected function retrieveWeather(CoordInterface $coord): ?Weather
+    protected function retrieveWeather(Ride $ride): ?Weather
     {
         try {
+            $coord = [
+                'lat' => $ride->getLatitude(),
+                'lon' => $ride->getLongitude(),
+            ];
+
             /** @var WeatherForecast $owmWeatherForecast */
-            $owmWeatherForecast = $this->openWeatherMap->getWeatherForecast($this->getLatLng($ride), 'metric', 'de',
-                null, 7);
+            $owmWeatherForecast = $this->openWeatherMap->getWeatherForecast($coord, 'metric', 'de',
+                null, 3);
+
+            $owmWeatherForecast->rewind();
 
             /** @var Forecast $owmWeather */
-            while ($owmWeather = $owmWeatherForecast->current()) {
-                if ($owmWeather->time->from->format('Y-m-d') == $ride->getDateTime()->format('Y-m-d')) {
+            while ($owmWeatherForecast->valid() && $owmWeather = $owmWeatherForecast->current()) {
+                if ($owmWeather->time->from->format('Y-m-d') === $ride->getDateTime()->format('Y-m-d')) {
                     break;
                 }
 
@@ -27,16 +35,8 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
             }
 
             if ($owmWeather) {
-                $weather = $this->createWeatherEntity($owmWeather);
-                $weather->setRide($ride);
-
-                $this->doctrine->getManager()->persist($weather);
-
-                return $weather;
+                return WeatherFactory::createWeather($owmWeather);
             }
-        } catch (OWMException $e) {
-            $this->logger->alert(sprintf('Cannot retrieve weather data: %s (Code %s).', $e->getMessage(),
-                $e->getCode()));
         } catch (\Exception $e) {
             $this->logger->alert(sprintf('Cannot retrieve weather data: %s (Code %s).', $e->getMessage(),
                 $e->getCode()));
@@ -45,8 +45,14 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
         return null;
     }
 
-    public function retrieve(\DateTime $startDateTime = null, \DateTime $endDateTime = null): array
+    public function retrieveWeatherForecastsForRideList(array $rideList = []): array
     {
-        // TODO: Implement retrieve() method.
+        $weatherForecastList = [];
+
+        foreach ($rideList as $ride) {
+            $weatherForecastList[] = $this->retrieveWeather($ride);
+        }
+
+        return $weatherForecastList;
     }
 }

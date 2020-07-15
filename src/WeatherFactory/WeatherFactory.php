@@ -7,20 +7,45 @@ use Cmfcmf\OpenWeatherMap\Forecast;
 
 class WeatherFactory implements WeatherFactoryInterface
 {
-    /** @var array $mapping */
-    protected $mapping = [
-        'setWeatherDateTime' => ['time', 'from'],
-        'setWeatherCode' => ['weather', 'id'],
-    ];
+    private function __construct()
+    {
+        
+    }
 
-    protected function getMapping(Weather $weather): array
+    public static function createWeather(Forecast $owmWeather): Weather
+    {
+        $weather = static::createEntity();
+
+        $weather = static::assignProperties($weather, $owmWeather);
+
+        $weather->setCreationDateTime(new \DateTime());
+
+        return $weather;
+    }
+
+    protected static function createEntity(): Weather
+    {
+        return new Weather();
+    }
+
+    protected static function getBaseMapping(): array
+    {
+        return [
+            'setWeatherDateTime' => ['time', 'from'],
+            'setWeatherCode' => ['weather', 'id'],
+        ];
+    }
+
+    protected static function createMapping(Weather $weather): array
     {
         $reflection = new \ReflectionClass($weather);
+
+        $mapping = static::getBaseMapping();
 
         foreach ($reflection->getMethods() as $method) {
             $methodName = $method->getShortName();
 
-            if (array_key_exists($methodName, $this->mapping)) {
+            if (array_key_exists($methodName, $mapping)) {
                 continue;
             }
 
@@ -32,22 +57,24 @@ class WeatherFactory implements WeatherFactoryInterface
 
             $path = array_map('strtolower', $matches[0]);
 
-            $this->mapping[$methodName] = $path;
+            $mapping[$methodName] = $path;
         }
 
-        return $this->mapping;
+        return $mapping;
     }
 
-    protected function assignProperties(Weather $weather, Forecast $owmWeather): Weather
+    protected static function assignProperties(Weather $weather, Forecast $owmWeather): Weather
     {
-        foreach ($this->getMapping($weather) as $methodName => $path) {
-            $weather = $this->assignProperty($weather, $owmWeather, $methodName, $path);
-        }
+        $mapping = static::createMapping($weather);
 
+        foreach ($mapping as $methodName => $path) {
+            $weather = static::assignProperty($weather, $owmWeather, $methodName, $path);
+        }
+die;
         return $weather;
     }
 
-    protected function assignProperty(Weather $weather, Forecast $owmWeather, string $methodName, array $path): Weather
+    protected static function assignProperty(Weather $weather, Forecast $owmWeather, string $methodName, array $path): Weather
     {
         if (2 === count($path)) {
             list($prop1, $prop2) = $path;
@@ -55,9 +82,7 @@ class WeatherFactory implements WeatherFactoryInterface
             if (property_exists($owmWeather, $prop1) && property_exists($owmWeather->{$prop1}, $prop2)) {
                 if (is_object($owmWeather->{$prop1}->{$prop2}) && method_exists($owmWeather->{$prop1}->{$prop2}, 'getValue')) {
                     $weather->$methodName($owmWeather->{$prop1}->{$prop2}->getValue());
-                }
-
-                if (is_string($owmWeather->{$prop1}->{$prop2}) || is_int($owmWeather->{$prop1}->{$prop2})) {
+                } if (is_string($owmWeather->{$prop1}->{$prop2}) || is_int($owmWeather->{$prop1}->{$prop2})) {
                     $weather->$methodName($owmWeather->{$prop1}->{$prop2});
                 }
             }
@@ -76,17 +101,6 @@ class WeatherFactory implements WeatherFactoryInterface
                 }
             }
         }
-
-        return $weather;
-    }
-
-    public function createWeather(Forecast $owmWeather): Weather
-    {
-        $weather = $this->createEntity();
-
-        $weather = $this->assignProperties($weather, $owmWeather);
-
-        $weather->setCreationDateTime(new \DateTime());
 
         return $weather;
     }

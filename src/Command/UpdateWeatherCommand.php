@@ -10,6 +10,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class UpdateWeatherCommand extends Command
 {
@@ -41,8 +42,10 @@ class UpdateWeatherCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         if ($input->getArgument('from')) {
             $startDateTime = new \DateTimeImmutable($input->getArgument('from'));
         } else {
@@ -58,25 +61,24 @@ class UpdateWeatherCommand extends Command
 
         $rideList = $this->rideRetriever->retrieveRides($startDateTime, $endDateTime);
 
-        dd($rideList);
+        $io->success(sprintf('Retrieved %d rides from %s until %s', count($rideList), $startDateTime->format('Y-m-d'), $endDateTime->format('Y-m-d')));
 
-        $this->weatherForecastRetriever->retrieve($startDateTime, $endDateTime);
-
-        $newForecasts = $this->weatherForecastRetriever->getNewWeatherForecasts();
+        $weatherList = $this->weatherForecastRetriever->retrieveWeatherForecastsForRideList($rideList);
 
         $table = new Table($output);
-        $table
-            ->setHeaders(['City', 'DateTime']);
+        $table->setHeaders(['City', 'DateTime']);
 
         /** @var Weather $weather */
-        foreach ($newForecasts as $weather) {
+        foreach ($weatherList as $weather) {
             $table
                 ->addRow([
-                    $weather->getRide()->getCity()->getCity(),
-                    $weather->getRide()->getDateTime()->format('Y-m-d'),
+              //      $weather->getRide()->getCity()->getCity(),
+                    $weather->getWeatherDateTime()->format('Y-m-d'),
                 ]);
         }
 
         $table->render();
+
+        return Command::SUCCESS;
     }
 }

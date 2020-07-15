@@ -4,6 +4,5 @@ namespace App\ForecastRetriever;
 
 interface WeatherForecastRetrieverInterface
 {
-    public function retrieve(\DateTime $startDateTime = null, \DateTime $endDateTime = null): array;
-    public function getNewWeatherForecasts(): array;
+    public function retrieveWeatherForecastsForRideList(array $rideList = []): array;
 }
