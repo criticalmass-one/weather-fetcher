@@ -41,6 +41,7 @@ class RideRetriever implements RideRetrieverInterface
             'month' => $dateTime->format('m'),
             'day' => $dateTime->format('d'),
             'size' => 250,
+            'extended' => true,
         ];
 
         $queryString = sprintf('/api/ride?%s', http_build_query($parameters));

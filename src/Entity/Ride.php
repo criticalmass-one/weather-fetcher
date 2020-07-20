@@ -15,6 +15,11 @@ class Ride
     protected int $id;
 
     /**
+     * @JMS\Expose
+     */
+    protected City $city;
+
+    /**
      * @JMS\Expose()
      * @JMS\Type("DateTime<'U'>")
      */
@@ -29,6 +34,18 @@ class Ride
      * @JMS\Expose
      */
     protected ?float $longitude = null;
+
+    public function setCity(City $city): Ride
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCity(): City
+    {
+        return $this->city;
+    }
 
     public function setDateTime(\DateTime $dateTime): Ride
     {
