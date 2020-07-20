@@ -29,6 +29,6 @@ class WeatherPusher implements WeatherPusherInterface
             'body' => $this->serializer->serialize($weather, 'json'),
         ]);
 
-        return Response::HTTP_OK === $response->getStatusCode();
+        return Response::HTTP_CREATED === $response->getStatusCode();
     }
 }
