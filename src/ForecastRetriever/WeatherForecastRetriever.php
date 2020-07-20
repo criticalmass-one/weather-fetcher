@@ -50,7 +50,11 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
         $weatherForecastList = [];
 
         foreach ($rideList as $ride) {
-            $weatherForecastList[] = $this->retrieveWeather($ride);
+            $weather = $this->retrieveWeather($ride);
+
+            if ($weather) {
+                $weatherForecastList[] = $weather;
+            }
         }
 
         return $weatherForecastList;

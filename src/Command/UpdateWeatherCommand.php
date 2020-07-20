@@ -103,9 +103,17 @@ class UpdateWeatherCommand extends Command
             ];
         }, $weatherList));
 
+        $successCounter = 0;
+
         foreach ($weatherList as $weather) {
-            $this->weatherPusher->pushWeather($weather);
+            $result = $this->weatherPusher->pushWeather($weather);
+
+            if ($result) {
+                ++$successCounter;
+            }
         }
+
+        $io->success(sprintf('Pushed %d weather data items to api', $successCounter));
 
         return Command::SUCCESS;
     }
