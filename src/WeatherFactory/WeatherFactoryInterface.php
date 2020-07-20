@@ -2,10 +2,11 @@
 
 namespace App\WeatherFactory;
 
+use App\Entity\Ride;
 use App\Entity\Weather;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
 interface WeatherFactoryInterface
 {
-    public static function createWeather(Forecast $owmWeather): Weather;
+    public static function createWeather(Forecast $owmWeather, Ride $ride): Weather;
 }

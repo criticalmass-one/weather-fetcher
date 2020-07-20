@@ -20,10 +20,20 @@ class Ride
     protected City $city;
 
     /**
+     * @JMS\Expose
+     */
+    protected string $title;
+
+    /**
      * @JMS\Expose()
      * @JMS\Type("DateTime<'U'>")
      */
     protected \DateTime $dateTime;
+
+    /**
+     * @JMS\Expose
+     */
+    protected ?string $location = null;
 
     /**
      * @JMS\Expose
@@ -34,6 +44,18 @@ class Ride
      * @JMS\Expose
      */
     protected ?float $longitude = null;
+
+    public function setTitle(string $title): Ride
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 
     public function setCity(City $city): Ride
     {
@@ -57,6 +79,18 @@ class Ride
     public function getDateTime(): \DateTime
     {
         return $this->dateTime;
+    }
+
+    public function setLocation(string $location): Ride
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getLocation(): string
+    {
+        return $this->location;
     }
 
     public function setLatitude(?float $latitude): Ride

@@ -35,7 +35,7 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
             }
 
             if ($owmWeather) {
-                return WeatherFactory::createWeather($owmWeather);
+                return WeatherFactory::createWeather($owmWeather, $ride);
             }
         } catch (\Exception $e) {
             $this->logger->alert(sprintf('Cannot retrieve weather data: %s (Code %s).', $e->getMessage(),

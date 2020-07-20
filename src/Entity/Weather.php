@@ -4,7 +4,7 @@ namespace App\Entity;
 
 class Weather
 {
-    protected int $rideId;
+    protected Ride $ride;
 
     protected ?string $json = null;
 
@@ -52,6 +52,18 @@ class Weather
     public function getJson(): ?string
     {
         return $this->json;
+    }
+
+    public function setRide(Ride $ride): Weather
+    {
+        $this->ride = $ride;
+
+        return $this;
+    }
+
+    public function getRide(): Ride
+    {
+        return $this->ride;
     }
 
     public function setJson(string $json = null): Weather

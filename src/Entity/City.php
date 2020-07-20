@@ -17,7 +17,24 @@ class City
     /**
      * @JMS\Expose
      */
+    protected ?string $name = null;
+
+    /**
+     * @JMS\Expose
+     */
     protected ?CitySlug $mainSlug = null;
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): City
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 
     public function getMainSlug(): CitySlug
     {

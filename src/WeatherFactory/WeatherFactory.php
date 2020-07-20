@@ -2,6 +2,7 @@
 
 namespace App\WeatherFactory;
 
+use App\Entity\Ride;
 use App\Entity\Weather;
 use Cmfcmf\OpenWeatherMap\Forecast;
 
@@ -12,13 +13,15 @@ class WeatherFactory implements WeatherFactoryInterface
         
     }
 
-    public static function createWeather(Forecast $owmWeather): Weather
+    public static function createWeather(Forecast $owmWeather, Ride $ride): Weather
     {
         $weather = static::createEntity();
 
         $weather = static::assignProperties($weather, $owmWeather);
 
-        $weather->setCreationDateTime(new \DateTime());
+        $weather
+            ->setCreationDateTime(new \DateTime())
+            ->setRide($ride);
 
         return $weather;
     }
