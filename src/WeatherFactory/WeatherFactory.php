@@ -19,6 +19,8 @@ class WeatherFactory implements WeatherFactoryInterface
 
         $weather = static::assignProperties($weather, $owmWeather);
 
+        $weather->setJson(static::createJson($owmWeather));
+
         $weather
             ->setCreationDateTime(new \DateTime())
             ->setRide($ride);
@@ -111,5 +113,10 @@ class WeatherFactory implements WeatherFactoryInterface
         }
 
         return $weather;
+    }
+
+    private static function createJson(Forecast $owmWeather): string
+    {
+        return json_encode($owmWeather);
     }
 }
