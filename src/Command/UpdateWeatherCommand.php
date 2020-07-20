@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Ride;
 use App\Entity\Weather;
 use App\ForecastRetriever\WeatherForecastRetrieverInterface;
 use App\RideRetriever\RideRetrieverInterface;
@@ -63,22 +64,19 @@ class UpdateWeatherCommand extends Command
 
         $io->success(sprintf('Retrieved %d rides from %s until %s', count($rideList), $startDateTime->format('Y-m-d'), $endDateTime->format('Y-m-d')));
 
+        $io->table(['DateTime', 'Latitude', 'Longitude'], array_map(function (Ride $ride): array
+        {
+            return [$ride->getDateTime()->format('Y-m-d H-i-s'), $ride->getLatitude(), $ride->getLongitude(),];
+        }, $rideList));
+
         $weatherList = $this->weatherForecastRetriever->retrieveWeatherForecastsForRideList($rideList);
-die;
-        dd($weatherList);
-        $table = new Table($output);
-        $table->setHeaders(['City', 'DateTime']);
 
-        /** @var Weather $weather */
-        foreach ($weatherList as $weather) {
-            $table
-                ->addRow([
-              //      $weather->getRide()->getCity()->getCity(),
-                    $weather->getWeatherDateTime()->format('Y-m-d'),
-                ]);
-        }
+        $io->success(sprintf('Retrieved %d weather data items for %d rides', count($weatherList), count($rideList)));
 
-        $table->render();
+        $io->table(['Weather DateTime', 'Weather Description'], array_map(function (Weather $weather): array
+        {
+            return [$weather->getWeatherDateTime()->format('Y-m-d H-i-s'), $weather->getWeatherDescription()];
+        }, $weatherList));
 
         return Command::SUCCESS;
     }
