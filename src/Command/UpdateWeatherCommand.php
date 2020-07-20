@@ -113,7 +113,13 @@ class UpdateWeatherCommand extends Command
             }
         }
 
-        $io->success(sprintf('Pushed %d weather data items to api', $successCounter));
+        if ($successCounter > 0) {
+            $io->success(sprintf('Pushed %d weather data items to api', $successCounter));
+        }
+
+        if (count($weatherList) - $successCounter > 0) {
+            $io->error(sprintf('Could not push %d weather data items to api', count($weatherList) - $successCounter));
+        }
 
         return Command::SUCCESS;
     }
