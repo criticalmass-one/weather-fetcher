@@ -11,13 +11,26 @@ use Cmfcmf\OpenWeatherMap\Exception as OWMException;
 
 class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 {
+    protected function getCoord(Ride $ride): ?array
+    {
+        if (!$ride->getLatitude() || !$ride->getLongitude()) {
+            return null;
+        }
+
+        return [
+            'lat' => $ride->getLatitude(),
+            'lon' => $ride->getLongitude(),
+        ];
+    }
+
     protected function retrieveWeather(Ride $ride): ?Weather
     {
         try {
-            $coord = [
-                'lat' => $ride->getLatitude(),
-                'lon' => $ride->getLongitude(),
-            ];
+            $coord = $this->getCoord($ride);
+
+            if (!$coord) {
+                return null;
+            }
 
             /** @var WeatherForecast $owmWeatherForecast */
             $owmWeatherForecast = $this->openWeatherMap->getWeatherForecast($coord, 'metric', 'de',
