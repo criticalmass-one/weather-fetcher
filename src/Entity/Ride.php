@@ -81,6 +81,11 @@ class Ride
         return $this->dateTime;
     }
 
+    public function hasLocation(): bool
+    {
+        return $this->location !== null;
+    }
+
     public function setLocation(string $location): Ride
     {
         $this->location = $location;
@@ -88,7 +93,7 @@ class Ride
         return $this;
     }
 
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
         return $this->location;
     }
