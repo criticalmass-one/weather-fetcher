@@ -16,6 +16,7 @@ class WeatherPusher implements WeatherPusherInterface
     {
         $this->client = new Client([
             'base_uri' => $criticalmassHostname,
+            'verify' => false,
         ]);
 
         $this->serializer = $serializer;
