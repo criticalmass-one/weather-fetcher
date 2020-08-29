@@ -33,8 +33,7 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
             }
 
             /** @var WeatherForecast $owmWeatherForecast */
-            $owmWeatherForecast = $this->openWeatherMap->getWeatherForecast($coord, 'metric', 'de',
-                null, 3);
+            $owmWeatherForecast = $this->openWeatherMap->getDailyWeatherForecast($coord, 'metric', 'de', null, 5);
 
             $owmWeatherForecast->rewind();
 
