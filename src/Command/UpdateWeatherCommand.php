@@ -7,6 +7,8 @@ use App\Entity\Weather;
 use App\ForecastRetriever\WeatherForecastRetrieverInterface;
 use App\RideRetriever\RideRetrieverInterface;
 use App\WeatherPusher\WeatherPusherInterface;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -106,10 +108,16 @@ class UpdateWeatherCommand extends Command
         $successCounter = 0;
 
         foreach ($weatherList as $weather) {
-            $result = $this->weatherPusher->pushWeather($weather);
+            try {
+                $result = $this->weatherPusher->pushWeather($weather);
 
-            if ($result) {
-                ++$successCounter;
+                if ($result) {
+                    ++$successCounter;
+                }
+            } catch (ServerException $exception) {
+
+            } catch (ClientException $clientException) {
+
             }
         }
 
