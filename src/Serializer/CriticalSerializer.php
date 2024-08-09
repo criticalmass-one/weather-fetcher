@@ -42,6 +42,7 @@ class CriticalSerializer implements CriticalSerializerInterface
     {
         $dateTimeNormalizerOptions = [
             DateTimeNormalizer::FORMAT_KEY => 'U',
+            DateTimeNormalizer::CAST_KEY => 'int',
         ];
 
         $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
