@@ -2,47 +2,20 @@
 
 namespace App\Entity;
 
-use JMS\Serializer\Annotation as JMS;
-
-/**
- * @JMS\ExclusionPolicy("all")
- */
 class Ride
 {
-    /**
-     * @JMS\Expose
-     */
     protected int $id;
 
-    /**
-     * @JMS\Expose
-     */
     protected City $city;
 
-    /**
-     * @JMS\Expose
-     */
     protected string $title;
 
-    /**
-     * @JMS\Expose()
-     * @JMS\Type("DateTime<'U'>")
-     */
     protected \DateTime $dateTime;
 
-    /**
-     * @JMS\Expose
-     */
     protected ?string $location = null;
 
-    /**
-     * @JMS\Expose
-     */
     protected ?float $latitude = null;
 
-    /**
-     * @JMS\Expose
-     */
     protected ?float $longitude = null;
 
     public function setTitle(string $title): Ride

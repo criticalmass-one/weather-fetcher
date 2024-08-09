@@ -2,26 +2,12 @@
 
 namespace App\Entity;
 
-use JMS\Serializer\Annotation as JMS;
-
-/**
- * @JMS\ExclusionPolicy("all")
- */
 class City
 {
-    /**
-     * @JMS\Expose
-     */
     protected ?int $id = null;
 
-    /**
-     * @JMS\Expose
-     */
     protected ?string $name = null;
 
-    /**
-     * @JMS\Expose
-     */
     protected ?CitySlug $mainSlug = null;
 
     public function getName(): ?string
