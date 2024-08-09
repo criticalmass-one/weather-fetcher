@@ -4,19 +4,13 @@ namespace App\Entity;
 
 class Ride
 {
-    protected int $id;
-
-    protected City $city;
-
-    protected string $title;
-
-    protected \DateTime $dateTime;
-
-    protected ?string $location = null;
-
-    protected ?float $latitude = null;
-
-    protected ?float $longitude = null;
+    private int $id;
+    private City $city;
+    private string $title;
+    private \DateTime $dateTime;
+    private ?string $location = null;
+    private ?float $latitude = null;
+    private ?float $longitude = null;
 
     public function setTitle(string $title): Ride
     {

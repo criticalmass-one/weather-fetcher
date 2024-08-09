@@ -4,16 +4,9 @@ namespace App\Entity;
 
 class City
 {
-    protected ?int $id = null;
-
-    protected ?string $name = null;
-
-    protected ?CitySlug $mainSlug = null;
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    private ?int $id = null;
+    private ?string $name = null;
+    private ?CitySlug $mainSlug = null;
 
     public function setName(string $name): City
     {
@@ -32,5 +25,15 @@ class City
         $this->mainSlug = $citySlug;
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

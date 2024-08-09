@@ -6,9 +6,8 @@ use JMS\Serializer\Annotation as JMS;
 
 class CitySlug
 {
-    protected int $id;
-
-    protected string $slug;
+    private int $id;
+    private string $slug;
 
     public function getSlug(): string
     {

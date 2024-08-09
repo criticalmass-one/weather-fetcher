@@ -4,45 +4,26 @@ namespace App\Entity;
 
 class Weather
 {
-    protected Ride $ride;
-
-    protected ?string $json = null;
-
-    protected ?\DateTime $weatherDateTime = null;
-
-    protected ?\DateTime $creationDateTime = null;
-
-    protected ?float $temperatureMin = null;
-
-    protected ?float $temperatureMax = null;
-
-    protected ?float $temperatureMorning = null;
-
-    protected ?float $temperatureDay = null;
-
-    protected ?float $temperatureEvening = null;
-
-    protected ?float $temperatureNight = null;
-
-    protected ?float $pressure = null;
-
-    protected ?float $humidity = null;
-
-    protected ?int $weatherCode = null;
-
-    protected ?string $weather = null;
-
-    protected ?string $weatherDescription = null;
-
-    protected ?string $weatherIcon = null;
-
-    protected ?float $windSpeed = null;
-
-    protected ?float $windDirection = null;
-
-    protected ?float $clouds = null;
-
-    protected ?float $precipitation = null;
+    private Ride $ride;
+    private ?string $json = null;
+    private ?\DateTime $weatherDateTime = null;
+    private ?\DateTime $creationDateTime = null;
+    private ?float $temperatureMin = null;
+    private ?float $temperatureMax = null;
+    private ?float $temperatureMorning = null;
+    private ?float $temperatureDay = null;
+    private ?float $temperatureEvening = null;
+    private ?float $temperatureNight = null;
+    private ?float $pressure = null;
+    private ?float $humidity = null;
+    private ?int $weatherCode = null;
+    private ?string $weather = null;
+    private ?string $weatherDescription = null;
+    private ?string $weatherIcon = null;
+    private ?float $windSpeed = null;
+    private ?float $windDirection = null;
+    private ?float $clouds = null;
+    private ?float $precipitation = null;
 
     public function __construct()
     {
