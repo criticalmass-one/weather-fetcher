@@ -19,4 +19,9 @@ class TimestampDenormalizer implements DenormalizerInterface
     {
         return $type === \DateTime::class && is_int($data);
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [\DateTime::class];
+    }
 }
