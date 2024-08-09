@@ -3,23 +3,23 @@
 namespace App\WeatherPusher;
 
 use App\Entity\Weather;
+use App\Serializer\CriticalSerializerInterface;
 use GuzzleHttp\Client;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class WeatherPusher implements WeatherPusherInterface
 {
-    protected Client $client;
-    protected SerializerInterface $serializer;
+    private Client $client;
 
-    public function __construct(SerializerInterface $serializer, string $criticalmassHostname)
-    {
+    public function __construct(
+        private CriticalSerializerInterface $serializer,
+        string $criticalmassHostname
+    ) {
         $this->client = new Client([
             'base_uri' => $criticalmassHostname,
             'verify' => false,
         ]);
-
-        $this->serializer = $serializer;
     }
 
     public function pushWeather(Weather $weather): bool

@@ -2,8 +2,6 @@
 
 namespace App\ForecastRetriever;
 
-use App\Entity\Ride;
-use App\WeatherFactory\WeatherFactoryInterface;
 use Cmfcmf\OpenWeatherMap;
 use Http\Adapter\Guzzle6\Client;
 use Http\Factory\Guzzle\RequestFactory;
@@ -13,12 +11,10 @@ abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrie
 {
     protected OpenWeatherMap $openWeatherMap;
 
-    protected LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger, string $owmApiKey)
-    {
-        $this->logger = $logger;
-
+    public function __construct(
+        protected readonly LoggerInterface $logger,
+        string $owmApiKey
+    ) {
         $httpRequestFactory = new RequestFactory();
         $httpClient = Client::createWithConfig([]);
 
