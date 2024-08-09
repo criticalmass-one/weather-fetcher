@@ -108,10 +108,8 @@ class UpdateWeatherCommand extends Command
                 if ($result) {
                     ++$successCounter;
                 }
-            } catch (ServerException $exception) {
-
+            } catch (ServerException $serverException) {
             } catch (ClientException $clientException) {
-
             }
         }
 
