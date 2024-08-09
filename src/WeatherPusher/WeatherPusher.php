@@ -5,7 +5,6 @@ namespace App\WeatherPusher;
 use App\Entity\Weather;
 use App\Serializer\CriticalSerializerInterface;
 use GuzzleHttp\Client;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class WeatherPusher implements WeatherPusherInterface
