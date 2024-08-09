@@ -15,7 +15,7 @@ class TimestampDenormalizer implements DenormalizerInterface
         throw new \InvalidArgumentException('Invalid timestamp');
     }
 
-    public function supportsDenormalization($data, $type, $format = null): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return $type === \DateTime::class && is_int($data);
     }
