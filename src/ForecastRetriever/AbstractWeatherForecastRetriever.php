@@ -3,7 +3,7 @@
 namespace App\ForecastRetriever;
 
 use Cmfcmf\OpenWeatherMap;
-use Http\Adapter\Guzzle6\Client;
+use Http\Adapter\Guzzle7\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Psr\Log\LoggerInterface;
 
