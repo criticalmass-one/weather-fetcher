@@ -18,6 +18,7 @@ class WeatherPusher implements WeatherPusherInterface
         $this->client = new Client([
             'base_uri' => $criticalmassHostname,
             'verify' => false,
+            'allow_redirects' => ['strict' => true]
         ]);
     }
 
@@ -25,7 +26,7 @@ class WeatherPusher implements WeatherPusherInterface
     {
         $apiUrl = sprintf('/api/%s/%s/weather', $weather->getRide()->getCity()->getMainSlug()->getSlug(), $weather->getRide()->getDateTime()->format('Y-m-d'));
 
-        $response = $this->client->put($apiUrl, [
+        $response = $this->client->request('PUT', $apiUrl, [
             'body' => $this->serializer->serialize($weather, 'json'),
         ]);
 
