@@ -10,7 +10,6 @@ use App\WeatherPusher\WeatherPusherInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,16 +17,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class UpdateWeatherCommand extends Command
 {
-    protected WeatherForecastRetrieverInterface $weatherForecastRetriever;
-    protected RideRetrieverInterface $rideRetriever;
-    protected WeatherPusherInterface $weatherPusher;
-
-    public function __construct(RideRetrieverInterface $rideRetriever, WeatherForecastRetrieverInterface $weatherForecastRetriever, WeatherPusherInterface $weatherPusher)
-    {
-        $this->weatherForecastRetriever = $weatherForecastRetriever;
-        $this->rideRetriever = $rideRetriever;
-        $this->weatherPusher = $weatherPusher;
-
+    public function __construct(
+        private readonly RideRetrieverInterface $rideRetriever,
+        private readonly WeatherForecastRetrieverInterface $weatherForecastRetriever,
+        private readonly WeatherPusherInterface $weatherPusher
+    ) {
         parent::__construct();
     }
 

@@ -2,22 +2,23 @@
 
 namespace App\RideRetriever;
 
+use App\Entity\Ride;
+use App\Serializer\CriticalSerializerInterface;
 use GuzzleHttp\Client;
-use JMS\Serializer\SerializerInterface;
 
 class RideRetriever implements RideRetrieverInterface
 {
-    protected Client $client;
-    protected SerializerInterface $serializer;
+    private Client $client;
 
-    public function __construct(SerializerInterface $serializer, string $criticalmassHostname)
+    public function __construct(
+        private readonly CriticalSerializerInterface $serializer,
+        string $criticalmassHostname
+    )
     {
         $this->client = new Client([
             'base_uri' => $criticalmassHostname,
             'verify' => false,
         ]);
-
-        $this->serializer = $serializer;
     }
 
     public function retrieveRides(\DateTimeInterface $fromDateTime, \DateTimeInterface $untilDateTime): array
@@ -51,6 +52,6 @@ class RideRetriever implements RideRetrieverInterface
 
         $rawResponse = $response->getBody()->getContents();
 
-        return $this->serializer->deserialize($rawResponse, 'array<App\Entity\Ride>', 'json');
+        return $this->serializer->deserialize($rawResponse, sprintf('%s[]', Ride::class), 'json');
     }
 }

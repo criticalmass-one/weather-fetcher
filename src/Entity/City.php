@@ -2,32 +2,11 @@
 
 namespace App\Entity;
 
-use JMS\Serializer\Annotation as JMS;
-
-/**
- * @JMS\ExclusionPolicy("all")
- */
 class City
 {
-    /**
-     * @JMS\Expose
-     */
-    protected ?int $id = null;
-
-    /**
-     * @JMS\Expose
-     */
-    protected ?string $name = null;
-
-    /**
-     * @JMS\Expose
-     */
-    protected ?CitySlug $mainSlug = null;
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+    private ?int $id = null;
+    private ?string $name = null;
+    private ?CitySlug $mainSlug = null;
 
     public function setName(string $name): City
     {
@@ -46,5 +25,15 @@ class City
         $this->mainSlug = $citySlug;
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }

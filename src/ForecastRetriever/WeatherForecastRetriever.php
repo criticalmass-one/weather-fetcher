@@ -7,7 +7,6 @@ use App\Entity\Weather;
 use App\WeatherFactory\WeatherFactory;
 use Cmfcmf\OpenWeatherMap\Forecast;
 use Cmfcmf\OpenWeatherMap\WeatherForecast;
-use Cmfcmf\OpenWeatherMap\Exception as OWMException;
 
 class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 {
