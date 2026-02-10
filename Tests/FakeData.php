@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\Tests;
+namespace App\Tests;
 
 class FakeData
 {
