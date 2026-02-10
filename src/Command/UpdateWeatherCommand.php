@@ -109,7 +109,9 @@ class UpdateWeatherCommand extends Command
                     ++$successCounter;
                 }
             } catch (ServerException $serverException) {
+                $io->warning(sprintf('Server error pushing weather for %s: %s', $weather->getRide()->getCity()->getName(), $serverException->getMessage()));
             } catch (ClientException $clientException) {
+                $io->warning(sprintf('Client error pushing weather for %s: %s', $weather->getRide()->getCity()->getName(), $clientException->getMessage()));
             }
         }
 
