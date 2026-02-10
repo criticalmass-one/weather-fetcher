@@ -7,13 +7,13 @@ use App\Entity\Weather;
 use App\ForecastRetriever\WeatherForecastRetrieverInterface;
 use App\RideRetriever\RideRetrieverInterface;
 use App\WeatherPusher\WeatherPusherInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
 class UpdateWeatherCommand extends Command
 {
@@ -108,9 +108,9 @@ class UpdateWeatherCommand extends Command
                 if ($result) {
                     ++$successCounter;
                 }
-            } catch (ServerException $serverException) {
+            } catch (ServerExceptionInterface $serverException) {
                 $io->warning(sprintf('Server error pushing weather for %s: %s', $weather->getRide()->getCity()->getName(), $serverException->getMessage()));
-            } catch (ClientException $clientException) {
+            } catch (ClientExceptionInterface $clientException) {
                 $io->warning(sprintf('Client error pushing weather for %s: %s', $weather->getRide()->getCity()->getName(), $clientException->getMessage()));
             }
         }

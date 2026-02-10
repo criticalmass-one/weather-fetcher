@@ -4,21 +4,23 @@ namespace App\WeatherPusher;
 
 use App\Entity\Weather;
 use App\Serializer\CriticalSerializerInterface;
-use GuzzleHttp\Client;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WeatherPusher implements WeatherPusherInterface
 {
-    private Client $client;
+    private HttpClientInterface $client;
 
     public function __construct(
         private CriticalSerializerInterface $serializer,
         string $criticalmassHostname
     ) {
-        $this->client = new Client([
+        $this->client = HttpClient::create([
             'base_uri' => $criticalmassHostname,
-            'verify' => false,
-            'allow_redirects' => ['strict' => true]
+            'verify_peer' => false,
+            'verify_host' => false,
+            'max_redirects' => 20,
         ]);
     }
 

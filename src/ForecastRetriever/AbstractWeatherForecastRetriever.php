@@ -3,9 +3,8 @@
 namespace App\ForecastRetriever;
 
 use Cmfcmf\OpenWeatherMap;
-use Http\Adapter\Guzzle7\Client;
-use Http\Factory\Guzzle\RequestFactory;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Psr18Client;
 
 abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrieverInterface
 {
@@ -15,9 +14,8 @@ abstract class AbstractWeatherForecastRetriever implements WeatherForecastRetrie
         protected readonly LoggerInterface $logger,
         string $owmApiKey
     ) {
-        $httpRequestFactory = new RequestFactory();
-        $httpClient = Client::createWithConfig([]);
+        $psr18Client = new Psr18Client();
 
-        $this->openWeatherMap = new OpenWeatherMap($owmApiKey, $httpClient, $httpRequestFactory);
+        $this->openWeatherMap = new OpenWeatherMap($owmApiKey, $psr18Client, $psr18Client);
     }
 }
