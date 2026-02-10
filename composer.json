@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cmfcmf/openweathermap-php-api": "^3.2",
@@ -39,6 +39,7 @@
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php84": "*",
         "symfony/polyfill-php83": "*",
         "symfony/polyfill-php82": "*",
         "symfony/polyfill-php81": "*",
