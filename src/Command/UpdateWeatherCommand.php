@@ -7,6 +7,7 @@ use App\Entity\Weather;
 use App\ForecastRetriever\WeatherForecastRetrieverInterface;
 use App\RideRetriever\RideRetrieverInterface;
 use App\WeatherPusher\WeatherPusherInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
+#[AsCommand(
+    name: 'criticalmass:weather:update',
+    description: 'Retrieve weather forecasts for parameterized range',
+)]
 class UpdateWeatherCommand extends Command
 {
     public function __construct(
@@ -28,8 +33,6 @@ class UpdateWeatherCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('criticalmass:weather:update')
-            ->setDescription('Retrieve weather forecasts for parameterized range')
             ->addArgument(
                 'from',
                 InputArgument::OPTIONAL,

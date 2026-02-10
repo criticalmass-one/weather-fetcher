@@ -7,14 +7,14 @@
         "ext-iconv": "*",
         "cmfcmf/openweathermap-php-api": "^3.2",
         "nyholm/psr7": "^1.8",
-        "symfony/console": "^7.1",
-        "symfony/dotenv": "^7.1",
+        "symfony/console": "^8.0",
+        "symfony/dotenv": "^8.0",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "^7.1",
-        "symfony/http-client": "^7.1",
-        "symfony/property-access": "^7.1",
-        "symfony/serializer": "^7.1",
-        "symfony/yaml": "^7.1"
+        "symfony/framework-bundle": "^8.0",
+        "symfony/http-client": "^8.0",
+        "symfony/property-access": "^8.0",
+        "symfony/serializer": "^8.0",
+        "symfony/yaml": "^8.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -65,7 +65,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "^7.1"
+            "require": "^8.0"
         }
     }
 }
