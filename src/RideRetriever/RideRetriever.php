@@ -4,20 +4,22 @@ namespace App\RideRetriever;
 
 use App\Entity\Ride;
 use App\Serializer\CriticalSerializerInterface;
-use GuzzleHttp\Client;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RideRetriever implements RideRetrieverInterface
 {
-    private Client $client;
+    private HttpClientInterface $client;
 
     public function __construct(
         private readonly CriticalSerializerInterface $serializer,
         string $criticalmassHostname
     )
     {
-        $this->client = new Client([
+        $this->client = HttpClient::create([
             'base_uri' => $criticalmassHostname,
-            'verify' => false,
+            'verify_peer' => false,
+            'verify_host' => false,
         ]);
     }
 
@@ -50,7 +52,7 @@ class RideRetriever implements RideRetrieverInterface
 
         $response = $this->client->request('GET', $queryString);
 
-        $rawResponse = $response->getBody()->getContents();
+        $rawResponse = $response->getContent();
 
         return $this->serializer->deserialize($rawResponse, sprintf('%s[]', Ride::class), 'json');
     }
