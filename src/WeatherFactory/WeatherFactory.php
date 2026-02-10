@@ -82,7 +82,7 @@ class WeatherFactory implements WeatherFactoryInterface
     protected static function assignProperty(Weather $weather, Forecast $owmWeather, string $methodName, array $path): Weather
     {
         if (2 === count($path)) {
-            list($prop1, $prop2) = $path;
+            [$prop1, $prop2] = $path;
 
             if (property_exists($owmWeather, $prop1) && property_exists($owmWeather->{$prop1}, $prop2)) {
                 if (is_object($owmWeather->{$prop1}->{$prop2}) && method_exists($owmWeather->{$prop1}->{$prop2}, 'getValue')) {
@@ -96,7 +96,7 @@ class WeatherFactory implements WeatherFactoryInterface
         }
 
         if (1 === count($path)) {
-            list($prop1) = $path;
+            [$prop1] = $path;
 
             if (property_exists($owmWeather, $prop1)) {
                 if (is_object($owmWeather->{$prop1}) && method_exists($owmWeather->{$prop1}, 'getValue')) {

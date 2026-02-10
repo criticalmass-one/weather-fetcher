@@ -1,21 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace Caldera\WeatherBundle\Tests;
+namespace App\Tests;
 
-use App\Criticalmass\Weather\WeatherFactory\WeatherFactory;
 use App\Entity\Ride;
+use App\WeatherFactory\WeatherFactory;
 use Cmfcmf\OpenWeatherMap\WeatherForecast;
 use PHPUnit\Framework\TestCase;
 
 class WeatherFactoryTest extends TestCase
 {
-    /** @var \SimpleXMLElement $fakeXml */
-    protected $fakeXml;
+    protected \SimpleXMLElement $fakeXml;
+    protected WeatherForecast $forecast;
 
-    /** @var WeatherForecast $forecast */
-    protected $forecast;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fakeXml = new \SimpleXMLElement(FakeData::forecastXML());
         $this->forecast = new WeatherForecast($this->fakeXml, 'Berlin', 2);
@@ -23,11 +20,8 @@ class WeatherFactoryTest extends TestCase
 
     public function test1(): void
     {
-        $weatherFactory = new WeatherFactory();
         $ride = new Ride();
-
-        $weather = $weatherFactory->createWeather($this->forecast->current());
-        $weather->setRide($ride);
+        $weather = WeatherFactory::createWeather($this->forecast->current(), $ride);
 
         $this->assertEquals(40.59, $weather->getTemperatureMin());
         $this->assertEquals(41.0, $weather->getTemperatureMax());

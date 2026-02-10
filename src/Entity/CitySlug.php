@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use JMS\Serializer\Annotation as JMS;
-
 class CitySlug
 {
     private int $id;
