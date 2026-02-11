@@ -1,0 +1,28 @@
+{
+  "name": "weather-fetcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/criticalmass-one/weather-fetcher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/criticalmass-one/weather-fetcher/issues"
+  },
+  "homepage": "https://github.com/criticalmass-one/weather-fetcher#readme",
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@symfony/stimulus-bridge": "^4.0.1",
+    "@symfony/webpack-encore": "^5.3.1",
+    "webpack-notifier": "^1.15.0"
+  }
+}
