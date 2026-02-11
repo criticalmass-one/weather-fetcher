@@ -7,13 +7,17 @@
         "ext-iconv": "*",
         "cmfcmf/openweathermap-php-api": "^3.2",
         "nyholm/psr7": "^1.8",
+        "symfony/asset": "^8.0",
         "symfony/console": "^8.0",
         "symfony/dotenv": "^8.0",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "^8.0",
         "symfony/http-client": "^8.0",
         "symfony/property-access": "^8.0",
+        "symfony/runtime": "^8.0",
         "symfony/serializer": "^8.0",
+        "symfony/twig-bundle": "^8.0",
+        "symfony/webpack-encore-bundle": "*",
         "symfony/yaml": "^8.0"
     },
     "config": {
@@ -23,7 +27,8 @@
         },
         "sort-packages": true,
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     },
     "autoload": {
