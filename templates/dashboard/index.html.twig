@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard — Weather Fetcher{% endblock %}
+
+{% block body %}
+<section class="hero-gradient text-white py-5 mb-4">
+    <div class="container">
+        <h1 class="display-5 fw-bold"><i class="bi bi-bicycle me-2"></i>Critical Mass Weather</h1>
+        <p class="lead mb-0">Wettervorhersagen für die nächsten 5 Tage abrufen und speichern.</p>
+    </div>
+</section>
+
+<main class="container mb-5" data-controller="rides">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0 me-3">Anstehende Touren</h2>
+        <div data-rides-target="spinner" class="spinner-border spinner-border-sm text-secondary" role="status" hidden>
+            <span class="visually-hidden">Laden…</span>
+        </div>
+    </div>
+
+    <div data-rides-target="error" class="alert alert-danger" hidden></div>
+    <div data-rides-target="container" id="rides-container"></div>
+    <div data-rides-target="empty" class="text-muted" hidden>
+        <i class="bi bi-calendar-x me-1"></i>Keine Touren in den nächsten 5 Tagen gefunden.
+    </div>
+</main>
+{% endblock %}
