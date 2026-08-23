@@ -18,9 +18,7 @@ class WeatherPusher implements WeatherPusherInterface
     ) {
         $this->client = HttpClient::create([
             'base_uri' => $criticalmassHostname,
-            'verify_peer' => false,
-            'verify_host' => false,
-            'max_redirects' => 20,
+            'max_redirects' => 3,
         ]);
     }
 
