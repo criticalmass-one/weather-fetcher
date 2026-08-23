@@ -18,8 +18,6 @@ class RideRetriever implements RideRetrieverInterface
     {
         $this->client = HttpClient::create([
             'base_uri' => $criticalmassHostname,
-            'verify_peer' => false,
-            'verify_host' => false,
         ]);
     }
 

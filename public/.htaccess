@@ -1,0 +1,24 @@
+# Document root of weather-fetcher, for the case where the vhost is pointed
+# here (which is what it should be pointed at, if the vhost has to exist at
+# all -- the application is cron-only and needs no web access).
+#
+# There is deliberately no front controller in this directory. These rules
+# make sure that nothing which might end up here later is exposed, and that
+# dot files stay unreachable even when requested percent-encoded.
+
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (^|/)\. - [F,L]
+</IfModule>
+
+Options -Indexes
