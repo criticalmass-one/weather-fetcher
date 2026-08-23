@@ -24,7 +24,15 @@ class WeatherPusher implements WeatherPusherInterface
 
     public function pushWeather(Weather $weather): bool
     {
-        $apiUrl = sprintf('/api/%s/%s/weather', $weather->getRide()->getCity()->getMainSlug()->getSlug(), $weather->getRide()->getDateTime()->format('Y-m-d'));
+        // The city slug comes from the remote API response, so it is untrusted
+        // input for the URL we are about to call back. Percent-encode it: an
+        // unencoded "../" would let a manipulated response steer this PUT - and
+        // its serialized payload - at a different endpoint of the API host.
+        $apiUrl = sprintf(
+            '/api/%s/%s/weather',
+            rawurlencode($weather->getRide()->getCity()->getMainSlug()->getSlug()),
+            $weather->getRide()->getDateTime()->format('Y-m-d')
+        );
 
         $response = $this->client->request('PUT', $apiUrl, [
             'body' => $this->serializer->serialize($weather, 'json'),
