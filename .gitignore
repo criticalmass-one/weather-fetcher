@@ -1,7 +1,15 @@
-.env
 .idea
 vendor
 var
+
+###> symfony/framework-bundle ###
+# Never commit real credentials. .env.local (and its per-environment
+# variants) is where the OpenWeatherMap key and APP_SECRET belong.
+.env
+.env.local
+.env.local.php
+.env.*.local
+###< symfony/framework-bundle ###
 
 # The webserver hardening rules are part of the application and must stay
 # tracked even when a global gitignore excludes .htaccess.
