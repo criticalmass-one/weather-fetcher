@@ -12,7 +12,7 @@ class CitySlug
         return $this->slug;
     }
 
-    public function setSlug(?string $slug = null): CitySlug
+    public function setSlug(string $slug): CitySlug
     {
         $this->slug = $slug;
 

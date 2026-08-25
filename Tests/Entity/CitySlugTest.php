@@ -17,16 +17,14 @@ final class CitySlugTest extends TestCase
         self::assertSame('hamburg', $citySlug->getSlug());
     }
 
-    /**
-     * setSlug() advertises a nullable parameter, but the backing property is a non-nullable
-     * string, so passing null (or omitting the argument) fails at runtime.
-     */
     #[Test]
-    public function settingNullSlugThrowsTypeError(): void
+    public function slugIsRequiredAndNotNullable(): void
     {
-        $this->expectException(\TypeError::class);
+        $parameter = new \ReflectionMethod(CitySlug::class, 'setSlug')->getParameters()[0];
 
-        (new CitySlug())->setSlug(null);
+        self::assertFalse($parameter->isOptional());
+        self::assertFalse($parameter->allowsNull());
+        self::assertSame('string', (string) $parameter->getType());
     }
 
     #[Test]
