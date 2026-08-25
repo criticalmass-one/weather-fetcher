@@ -30,7 +30,7 @@ class RideRetriever implements RideRetrieverInterface
         $dateTime = $fromDateTime;
 
         do {
-            $rideList += $this->retrieveRidesForDate($dateTime);
+            $rideList = array_merge($rideList, $this->retrieveRidesForDate($dateTime));
 
             $dateTime = $dateTime->add($dayInterval);
         } while ($dateTime < $untilDateTime);
