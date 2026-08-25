@@ -16,6 +16,7 @@ final class CityTest extends TestCase
 
         self::assertNull($city->getId());
         self::assertNull($city->getName());
+        self::assertNull($city->getMainSlug());
     }
 
     #[Test]
@@ -38,15 +39,9 @@ final class CityTest extends TestCase
         self::assertSame($city, $city->setMainSlug(new CitySlug()));
     }
 
-    /**
-     * The property is nullable but the getter promises a CitySlug, so a city without
-     * main slug (e.g. incomplete API payload) blows up with a TypeError instead of null.
-     */
     #[Test]
-    public function getMainSlugWithoutSlugThrowsTypeError(): void
+    public function mainSlugIsNullByDefault(): void
     {
-        $this->expectException(\TypeError::class);
-
-        (new City())->getMainSlug();
+        self::assertNull((new City())->getMainSlug());
     }
 }
