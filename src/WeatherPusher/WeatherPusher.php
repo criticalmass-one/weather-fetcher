@@ -32,6 +32,10 @@ class WeatherPusher implements WeatherPusherInterface
             'body' => $this->serializer->serialize($weather, 'json'),
         ]);
 
+        // getContent() throws ClientExceptionInterface/ServerExceptionInterface for 4xx/5xx
+        // responses so that the caller can report the failure per ride.
+        $response->getContent();
+
         return Response::HTTP_CREATED === $response->getStatusCode();
     }
 }
