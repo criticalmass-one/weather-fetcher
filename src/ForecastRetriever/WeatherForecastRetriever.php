@@ -34,19 +34,13 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
             /** @var WeatherForecast $owmWeatherForecast */
             $owmWeatherForecast = $this->openWeatherMap->getDailyWeatherForecast($coord, 'metric', 'de', null, 5);
 
-            $owmWeatherForecast->rewind();
+            $rideDate = $ride->getDateTime()->format('Y-m-d');
 
             /** @var Forecast $owmWeather */
-            while ($owmWeatherForecast->valid() && $owmWeather = $owmWeatherForecast->current()) {
-                if ($owmWeather->time->from->format('Y-m-d') === $ride->getDateTime()->format('Y-m-d')) {
-                    break;
+            foreach ($owmWeatherForecast as $owmWeather) {
+                if ($owmWeather->time->from->format('Y-m-d') === $rideDate) {
+                    return WeatherFactory::createWeather($owmWeather, $ride);
                 }
-
-                $owmWeatherForecast->next();
-            }
-
-            if ($owmWeather) {
-                return WeatherFactory::createWeather($owmWeather, $ride);
             }
         } catch (\Exception $e) {
             $this->logger->alert(sprintf('Cannot retrieve weather data: %s (Code %s).', $e->getMessage(),

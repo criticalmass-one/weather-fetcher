@@ -119,12 +119,8 @@ final class WeatherForecastRetrieverTest extends TestCase
         self::assertSame(111, $weatherList[0]->getWeatherCode());
     }
 
-    /**
-     * Documents current behaviour: if no forecast day matches the ride date the loop runs
-     * off the end and the *last* forecast item is used instead of returning null.
-     */
     #[Test]
-    public function fallsBackToLastForecastDayWhenNoDayMatchesTheRide(): void
+    public function yieldsNothingWhenNoForecastDayMatchesTheRideDate(): void
     {
         $xml = Fixtures::forecastXml([
             ['day' => '2026-06-01', 'symbolNumber' => 100],
@@ -134,17 +130,13 @@ final class WeatherForecastRetrieverTest extends TestCase
 
         $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(dateTime: '2026-06-30 19:00:00')]);
 
-        self::assertCount(1, $weatherList);
-        self::assertSame(200, $weatherList[0]->getWeatherCode());
-        self::assertSame('2026-06-02', $weatherList[0]->getWeatherDateTime()->format('Y-m-d'));
+        self::assertSame([], $weatherList);
+        self::assertCount(1, $this->requestedUrls);
+        self::assertSame([], $this->alerts);
     }
 
-    /**
-     * Documents current behaviour: an empty <forecast> leaves $owmWeather undefined, which
-     * PHP reports as a warning; the retriever then logs it as a failed lookup.
-     */
     #[Test]
-    public function emptyForecastTriggersUndefinedVariableWarningAndYieldsNothing(): void
+    public function emptyForecastYieldsNothingWithoutWarnings(): void
     {
         $retriever = $this->createRetriever([new MockResponse(Fixtures::forecastXml([]))]);
 
@@ -159,8 +151,7 @@ final class WeatherForecastRetrieverTest extends TestCase
         }
 
         self::assertSame([], $weatherList);
-        self::assertCount(1, $this->alerts);
-        self::assertStringContainsString('Undefined variable $owmWeather', $this->alerts[0]);
+        self::assertSame([], $this->alerts);
     }
 
     #[Test]
