@@ -1,4 +1,6 @@
 {
+    "name": "criticalmass-one/weather-fetcher",
+    "description": "Fetches OpenWeatherMap forecasts for upcoming Critical Mass rides and pushes them to the criticalmass.in API",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -65,7 +67,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "^8.0"
+            "require": "8.0.*"
         }
     }
 }
