@@ -12,7 +12,7 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
 {
     protected function getCoord(Ride $ride): ?array
     {
-        if (!$ride->getLatitude() || !$ride->getLongitude()) {
+        if (null === $ride->getLatitude() || null === $ride->getLongitude()) {
             return null;
         }
 

@@ -170,19 +170,17 @@ final class WeatherForecastRetrieverTest extends TestCase
         self::assertSame([], $this->alerts);
     }
 
-    /**
-     * Documents current behaviour: coordinates are checked for truthiness, so a ride
-     * exactly on the equator or the prime meridian (0.0) is treated as "no coordinates".
-     */
     #[Test]
-    public function zeroCoordinateIsTreatedAsMissing(): void
+    public function zeroCoordinatesAreValidCoordinates(): void
     {
-        $retriever = $this->createRetriever([]);
+        $retriever = $this->createRetriever([new MockResponse(Fixtures::forecastXml([['day' => '2026-06-26', 'symbolNumber' => 800]]))]);
 
-        $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(latitude: 0.0, longitude: 9.99)]);
+        $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(dateTime: '2026-06-26 19:00:00', latitude: 0.0, longitude: 0.0)]);
 
-        self::assertSame([], $weatherList);
-        self::assertSame([], $this->requestedUrls);
+        self::assertCount(1, $this->requestedUrls);
+        self::assertStringContainsString('lat=0&lon=0', $this->requestedUrls[0]);
+        self::assertCount(1, $weatherList);
+        self::assertSame(800, $weatherList[0]->getWeatherCode());
     }
 
     #[Test]
