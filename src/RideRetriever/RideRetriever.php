@@ -27,7 +27,7 @@ class RideRetriever implements RideRetrieverInterface
     {
         $dayInterval = new \DateInterval('P1D');
         $rideList = [];
-        $dateTime = $fromDateTime;
+        $dateTime = \DateTimeImmutable::createFromInterface($fromDateTime);
 
         do {
             $rideList = array_merge($rideList, $this->retrieveRidesForDate($dateTime));

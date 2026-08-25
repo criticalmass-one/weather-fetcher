@@ -164,12 +164,8 @@ final class RideRetrieverTest extends TestCase
         self::assertSame([0, 1, 2, 3, 4, 5], array_keys($rides));
     }
 
-    /**
-     * Documents current behaviour: DateTimeInterface::add() is called on the caller's
-     * object, so a mutable DateTime passed as "from" is advanced to the end of the range.
-     */
     #[Test]
-    public function mutableFromDateIsAdvancedAsSideEffect(): void
+    public function mutableFromDateIsLeftUntouched(): void
     {
         $retriever = $this->createRetriever(static fn (): MockResponse => new MockResponse('[]'));
         $from = new \DateTime('2026-06-01 00:00:00');
@@ -177,7 +173,8 @@ final class RideRetrieverTest extends TestCase
 
         $retriever->retrieveRides($from, $until);
 
-        self::assertSame('2026-06-03', $from->format('Y-m-d'));
+        self::assertSame('2026-06-01', $from->format('Y-m-d'));
+        self::assertSame('2026-06-03', $until->format('Y-m-d'));
         self::assertCount(2, $this->requests);
     }
 
