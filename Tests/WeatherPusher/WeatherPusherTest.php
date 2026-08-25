@@ -11,6 +11,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 
 final class WeatherPusherTest extends TestCase
 {
@@ -96,28 +98,53 @@ final class WeatherPusherTest extends TestCase
     /**
      * @return iterable<string, array{int}>
      */
-    public static function nonCreatedStatusCodes(): iterable
+    public static function nonCreatedSuccessStatusCodes(): iterable
     {
         yield 'ok' => [200];
+        yield 'accepted' => [202];
         yield 'no content' => [204];
-        yield 'bad request' => [400];
-        yield 'unauthorized' => [401];
-        yield 'not found' => [404];
-        yield 'server error' => [500];
     }
 
-    /**
-     * Only the status code is inspected, so 4xx/5xx do not raise the HttpClient exceptions
-     * that UpdateWeatherCommand is prepared to catch; the push simply reports false.
-     */
     #[Test]
-    #[DataProvider('nonCreatedStatusCodes')]
-    public function returnsFalseWithoutThrowingForOtherStatusCodes(int $statusCode): void
+    #[DataProvider('nonCreatedSuccessStatusCodes')]
+    public function returnsFalseForSuccessfulResponsesOtherThanCreated(int $statusCode): void
     {
-        $pusher = $this->createPusher(new MockResponse('{"error":"x"}', ['http_code' => $statusCode]));
+        $pusher = $this->createPusher(new MockResponse('', ['http_code' => $statusCode]));
 
         self::assertFalse($pusher->pushWeather(Fixtures::weather()));
         self::assertCount(1, $this->requests);
+    }
+
+    /**
+     * @return iterable<string, array{int, class-string<\Throwable>}>
+     */
+    public static function errorStatusCodes(): iterable
+    {
+        yield 'bad request' => [400, ClientExceptionInterface::class];
+        yield 'unauthorized' => [401, ClientExceptionInterface::class];
+        yield 'not found' => [404, ClientExceptionInterface::class];
+        yield 'server error' => [500, ServerExceptionInterface::class];
+        yield 'bad gateway' => [502, ServerExceptionInterface::class];
+    }
+
+    /**
+     * 4xx/5xx responses surface as the HttpClient exceptions UpdateWeatherCommand catches
+     * and reports per city.
+     */
+    #[Test]
+    #[DataProvider('errorStatusCodes')]
+    public function throwsForErrorResponses(int $statusCode, string $expectedException): void
+    {
+        $pusher = $this->createPusher(new MockResponse('{"error":"x"}', ['http_code' => $statusCode]));
+
+        try {
+            $pusher->pushWeather(Fixtures::weather());
+            self::fail('Expected an HTTP exception');
+        } catch (ClientExceptionInterface|ServerExceptionInterface $exception) {
+            self::assertInstanceOf($expectedException, $exception);
+            self::assertSame($statusCode, $exception->getResponse()->getStatusCode());
+            self::assertCount(1, $this->requests);
+        }
     }
 
     #[Test]

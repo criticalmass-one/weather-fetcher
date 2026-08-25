@@ -146,14 +146,8 @@ final class RideRetrieverTest extends TestCase
         self::assertSame([], $retriever->retrieveRides($this->date('2026-06-01'), $this->date('2026-06-04')));
     }
 
-    /**
-     * Documents current behaviour: the per-day lists are merged with the array union
-     * operator (+=), which keeps the FIRST value for every numeric key. Rides from later
-     * days therefore silently overwrite nothing and are dropped whenever an earlier day
-     * already produced a ride with the same index.
-     */
     #[Test]
-    public function ridesOfLaterDaysAreLostWhenIndexesCollide(): void
+    public function collectsRidesOfAllDaysInRequestOrder(): void
     {
         $retriever = $this->createRetriever([
             new MockResponse(Fixtures::rideListJson([['title' => 'day1-a'], ['title' => 'day1-b']])),
@@ -164,17 +158,14 @@ final class RideRetrieverTest extends TestCase
         $rides = $retriever->retrieveRides($this->date('2026-06-01'), $this->date('2026-06-04'));
 
         self::assertSame(
-            ['day1-a', 'day1-b', 'day3-c'],
+            ['day1-a', 'day1-b', 'day2-a', 'day3-a', 'day3-b', 'day3-c'],
             array_map(static fn (Ride $ride): string => $ride->getTitle(), $rides),
         );
+        self::assertSame([0, 1, 2, 3, 4, 5], array_keys($rides));
     }
 
-    /**
-     * Documents current behaviour: DateTimeInterface::add() is called on the caller's
-     * object, so a mutable DateTime passed as "from" is advanced to the end of the range.
-     */
     #[Test]
-    public function mutableFromDateIsAdvancedAsSideEffect(): void
+    public function mutableFromDateIsLeftUntouched(): void
     {
         $retriever = $this->createRetriever(static fn (): MockResponse => new MockResponse('[]'));
         $from = new \DateTime('2026-06-01 00:00:00');
@@ -182,7 +173,8 @@ final class RideRetrieverTest extends TestCase
 
         $retriever->retrieveRides($from, $until);
 
-        self::assertSame('2026-06-03', $from->format('Y-m-d'));
+        self::assertSame('2026-06-01', $from->format('Y-m-d'));
+        self::assertSame('2026-06-03', $until->format('Y-m-d'));
         self::assertCount(2, $this->requests);
     }
 

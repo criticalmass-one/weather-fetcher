@@ -119,12 +119,8 @@ final class WeatherForecastRetrieverTest extends TestCase
         self::assertSame(111, $weatherList[0]->getWeatherCode());
     }
 
-    /**
-     * Documents current behaviour: if no forecast day matches the ride date the loop runs
-     * off the end and the *last* forecast item is used instead of returning null.
-     */
     #[Test]
-    public function fallsBackToLastForecastDayWhenNoDayMatchesTheRide(): void
+    public function yieldsNothingWhenNoForecastDayMatchesTheRideDate(): void
     {
         $xml = Fixtures::forecastXml([
             ['day' => '2026-06-01', 'symbolNumber' => 100],
@@ -134,17 +130,13 @@ final class WeatherForecastRetrieverTest extends TestCase
 
         $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(dateTime: '2026-06-30 19:00:00')]);
 
-        self::assertCount(1, $weatherList);
-        self::assertSame(200, $weatherList[0]->getWeatherCode());
-        self::assertSame('2026-06-02', $weatherList[0]->getWeatherDateTime()->format('Y-m-d'));
+        self::assertSame([], $weatherList);
+        self::assertCount(1, $this->requestedUrls);
+        self::assertSame([], $this->alerts);
     }
 
-    /**
-     * Documents current behaviour: an empty <forecast> leaves $owmWeather undefined, which
-     * PHP reports as a warning; the retriever then logs it as a failed lookup.
-     */
     #[Test]
-    public function emptyForecastTriggersUndefinedVariableWarningAndYieldsNothing(): void
+    public function emptyForecastYieldsNothingWithoutWarnings(): void
     {
         $retriever = $this->createRetriever([new MockResponse(Fixtures::forecastXml([]))]);
 
@@ -159,8 +151,7 @@ final class WeatherForecastRetrieverTest extends TestCase
         }
 
         self::assertSame([], $weatherList);
-        self::assertCount(1, $this->alerts);
-        self::assertStringContainsString('Undefined variable $owmWeather', $this->alerts[0]);
+        self::assertSame([], $this->alerts);
     }
 
     #[Test]
@@ -179,19 +170,17 @@ final class WeatherForecastRetrieverTest extends TestCase
         self::assertSame([], $this->alerts);
     }
 
-    /**
-     * Documents current behaviour: coordinates are checked for truthiness, so a ride
-     * exactly on the equator or the prime meridian (0.0) is treated as "no coordinates".
-     */
     #[Test]
-    public function zeroCoordinateIsTreatedAsMissing(): void
+    public function zeroCoordinatesAreValidCoordinates(): void
     {
-        $retriever = $this->createRetriever([]);
+        $retriever = $this->createRetriever([new MockResponse(Fixtures::forecastXml([['day' => '2026-06-26', 'symbolNumber' => 800]]))]);
 
-        $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(latitude: 0.0, longitude: 9.99)]);
+        $weatherList = $retriever->retrieveWeatherForecastsForRideList([Fixtures::ride(dateTime: '2026-06-26 19:00:00', latitude: 0.0, longitude: 0.0)]);
 
-        self::assertSame([], $weatherList);
-        self::assertSame([], $this->requestedUrls);
+        self::assertCount(1, $this->requestedUrls);
+        self::assertStringContainsString('lat=0&lon=0', $this->requestedUrls[0]);
+        self::assertCount(1, $weatherList);
+        self::assertSame(800, $weatherList[0]->getWeatherCode());
     }
 
     #[Test]
