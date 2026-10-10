@@ -34,16 +34,7 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
             /** @var WeatherForecast $owmWeatherForecast */
             $owmWeatherForecast = $this->openWeatherMap->getDailyWeatherForecast($coord, 'metric', 'de', null, 5);
 
-            $owmWeatherForecast->rewind();
-
-            /** @var Forecast $owmWeather */
-            while ($owmWeatherForecast->valid() && $owmWeather = $owmWeatherForecast->current()) {
-                if ($owmWeather->time->from->format('Y-m-d') === $ride->getDateTime()->format('Y-m-d')) {
-                    break;
-                }
-
-                $owmWeatherForecast->next();
-            }
+            $owmWeather = self::findForecastForDay($owmWeatherForecast, $ride->getDateTime()->format('Y-m-d'));
 
             if ($owmWeather) {
                 return WeatherFactory::createWeather($owmWeather, $ride);
@@ -51,6 +42,20 @@ class WeatherForecastRetriever extends AbstractWeatherForecastRetriever
         } catch (\Exception $e) {
             $this->logger->alert(sprintf('Cannot retrieve weather data: %s (Code %s).', $e->getMessage(),
                 $e->getCode()));
+        }
+
+        return null;
+    }
+
+    /**
+     * Ohne Treffer null: Bisher blieb hier der letzte Vorhersagetag stehen und wurde als Wetter der Tour gespeichert.
+     */
+    public static function findForecastForDay(WeatherForecast $forecast, string $day): ?Forecast
+    {
+        foreach ($forecast as $owmWeather) {
+            if ($owmWeather->time->from->format('Y-m-d') === $day) {
+                return $owmWeather;
+            }
         }
 
         return null;
